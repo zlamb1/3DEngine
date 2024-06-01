@@ -5,6 +5,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
+#include "Time/FrameTime.h"
 #include "Window/WindowHnd.h"
 
 namespace CameraUtility {
@@ -28,11 +29,23 @@ public:
 	virtual ~Camera() = default;
 
 	virtual glm::mat4 CreateViewMatrix() const = 0;
-	virtual void ProcessMouseMove(const WindowHnd& window, double xpos, double ypos) {};
+	virtual void ProcessMouseMove(const WindowHnd& window, double xpos, double ypos) {}
 	virtual void ProcessMouseScroll(const WindowHnd& window, double xoffset, double yoffset) {}
-	virtual void ProcessKeyInput(const WindowHnd& window, const std::vector<bool>& keyBuffer) {};
+
+	glm::vec3& Position() {
+		return m_Position; 
+	}
+
+	glm::vec3& Rotation() {
+		return m_Rotation; 
+	}
+
+	float& MouseSensitivity() {
+		return m_MouseSens; 
+	}
 
 protected:
+	float m_MouseSens = 0.01f;
 	glm::vec3 m_Position{}, m_Rotation{};
 
 	void ClampPitch() {

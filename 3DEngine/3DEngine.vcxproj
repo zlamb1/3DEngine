@@ -137,6 +137,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\glad\src\glad.c" />
+    <ClCompile Include="Entity\Player.cpp" />
+    <ClCompile Include="Time\FrameTime.cpp" />
+    <ClCompile Include="Render\GL\GLMesh.cpp" />
     <ClCompile Include="Render\GL\GLAttribLayout.cpp" />
     <ClCompile Include="Render\GL\GLTexture.cpp" />
     <ClCompile Include="IO\STB\STBImageLoader.cpp" />
@@ -149,6 +152,18 @@
     <ClCompile Include="Render\GL\GLRenderCore.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entity\Player.h" />
+    <ClInclude Include="Event\EventHandler.h" />
+    <ClInclude Include="Event\IEvent.h" />
+    <ClInclude Include="Event\EventDispatcher.h" />
+    <ClInclude Include="Event\Input\KeyPressEvent.h" />
+    <ClInclude Include="Event\Input\MouseMoveEvent.h" />
+    <ClInclude Include="Event\Input\MouseScrollEvent.h" />
+    <ClInclude Include="Event\Input\WindowFocusEvent.h" />
+    <ClInclude Include="Event\Input\WindowResizeEvent.h" />
+    <ClInclude Include="Time\StateTracker.h" />
+    <ClInclude Include="Time\FrameTime.h" />
+    <ClInclude Include="Render\GL\GLMesh.h" />
     <ClInclude Include="IO\FileReader.h" />
     <ClInclude Include="IO\ImageLoader.h" />
     <ClInclude Include="Render\IAttribLayout.h" />
@@ -157,6 +172,7 @@
     <ClInclude Include="Render\GL\GLTexture.h" />
     <ClInclude Include="IO\STB\STBImageLoader.h" />
     <ClInclude Include="Render\IShader.h" />
+    <ClInclude Include="Render\Mesh.h" />
     <ClInclude Include="View\TPCamera.h" />
     <ClInclude Include="View\Camera.h" />
     <ClInclude Include="View\FPCamera.h" />

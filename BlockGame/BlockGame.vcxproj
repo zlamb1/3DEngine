@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="BlockGameEngine.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="Render\Chunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\3DEngine\3DEngine.vcxproj">
@@ -149,6 +150,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockGameEngine.h" />
+    <ClInclude Include="Render\Chunk.h" />
+    <ClInclude Include="Render\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\chunk.frag" />

@@ -1,5 +1,11 @@
 #include "GLFWWindowHnd.h"
 
+#include "Event/Input/KeyPressEvent.h"
+#include "Event/Input/MouseMoveEvent.h"
+#include "Event/Input/MouseScrollEvent.h"
+#include "Event/Input/WindowFocusEvent.h"
+#include "Event/Input/WindowResizeEvent.h"
+
 GLFWWindowHnd::GLFWWindowHnd(const std::string& title) : WindowHnd(title) {
 	m_WindowPtr = nullptr; 
 }
@@ -83,39 +89,34 @@ void GLFWWindowHnd::SetLastMousePosition(double xpos, double ypos) {
 	m_LastMouseY = ypos; 
 }
 
-void GLFWWindowHnd::OnMouseMove(GLFWwindow* window, double xpos, double ypos) {
-	GLFWWindowHnd* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
-	for (auto& f : windowHnd->m_MouseMoveCallbacks) {
-		f(xpos, ypos);
-	}
-
-	windowHnd->SetLastMousePosition(xpos, ypos); 
+void GLFWWindowHnd::OnMouseMove(GLFWwindow* window, double xPos, double yPos) {
+	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
+	const MouseMoveEvent _event{ xPos, yPos };
+	windowHnd->GetEventDispatcher().Dispatch<MouseMoveEvent>(_event); 
+	windowHnd->SetLastMousePosition(xPos, yPos); 
 }
 
 void GLFWWindowHnd::OnKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	const GLFWWindowHnd* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
-	for (auto& f : windowHnd->m_KeyPressCallbacks) {
-		f(key, action); 
-	}
+	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
+	const KeyPressEvent _event{ key, action };
+	windowHnd->GetEventDispatcher().Dispatch<KeyPressEvent>(_event); 
 }
 
 void GLFWWindowHnd::OnWindowResize(GLFWwindow* window, int width, int height) {
-	const GLFWWindowHnd* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
-	for (auto& f : windowHnd->m_WindowResizeCallbacks) {
-		f(width, height);
-	}
+	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
+	const WindowResizeEvent _event{ width, height };
+	windowHnd->GetEventDispatcher().Dispatch<WindowResizeEvent>(_event); 
 }
 
 void GLFWWindowHnd::OnWindowFocus(GLFWwindow* window, int focused) {
-	const GLFWWindowHnd* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
-	for (auto& f : windowHnd->m_WindowFocusCallbacks) {
-		f(focused); 
-	}
+	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
+	const WindowFocusEvent _event{ static_cast<bool>(focused) };
+	windowHnd->GetEventDispatcher().Dispatch<WindowFocusEvent>(_event); 
 }
 
 void GLFWWindowHnd::OnMouseScroll(GLFWwindow* window, double xoffset, double yoffset) {
-	const GLFWWindowHnd* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
-	for (auto& f : windowHnd->m_MouseScrollCallbacks) {
-		f(xoffset, yoffset); 
-	}
+	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
+	const MouseScrollDirection direction = static_cast<bool>(yoffset) ? UP : DOWN;
+	const MouseScrollEvent _event{ direction };
+	windowHnd->GetEventDispatcher().Dispatch<MouseScrollEvent>(_event); 
 }

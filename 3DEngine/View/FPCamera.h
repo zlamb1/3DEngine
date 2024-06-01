@@ -9,6 +9,5 @@ class FPCamera: public Camera {
 public:
 	glm::mat4 CreateViewMatrix() const override;
 	void ProcessMouseMove(const WindowHnd& window, double xpos, double ypos) override;
-	void ProcessKeyInput(const WindowHnd& window, const std::vector<bool>& keyBuffer) override;
 
 };

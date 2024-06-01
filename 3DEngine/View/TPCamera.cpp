@@ -2,8 +2,6 @@
 
 #include "Logger.h"
 
-constexpr float MOUSE_SENS = 0.02f; 
-
 glm::mat4 TPCamera::CreateViewMatrix() const {
 	return glm::lookAt(CameraUtility::VectorInUnitSphere(m_Position, m_Rotation.x, m_Rotation.y) * m_Zoom,
 		m_Position, CameraUtility::UP_VECTOR);
@@ -14,7 +12,7 @@ void TPCamera::ProcessMouseMove(const WindowHnd& window, double xpos, double ypo
 		double lastXPos, lastYPos;
 		window.GetLastMousePos(&lastXPos, &lastYPos);
 		const double dx = xpos - lastXPos, dy = ypos - lastYPos;
-		m_Rotation += glm::vec3(-dx, dy, 0) * MOUSE_SENS;
+		m_Rotation += glm::vec3(-dx, dy, 0) * m_MouseSens;
 		ClampPitch();
 	}
 }

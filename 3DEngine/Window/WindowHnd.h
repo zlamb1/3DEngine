@@ -6,6 +6,8 @@
 
 #include "Logger.h"
 
+#include "Event/EventDispatcher.h"
+
 namespace Window {
 	struct InitFlags {
 		bool m_Maximized = false;
@@ -55,46 +57,23 @@ public:
 	virtual void SetCursorCentered() = 0;
 	virtual void SetCursorHidden(bool hidden) = 0;
 
-	virtual void GetLastMousePos(double* xpos, double* ypos) const {
-		if (xpos && ypos) {
-			*xpos = m_LastMouseX;
-			*ypos = m_LastMouseY;
+	virtual void GetLastMousePos(double* xPos, double* yPos) const {
+		if (xPos && yPos) {
+			*xPos = m_LastMouseX;
+			*yPos = m_LastMouseY;
 		} else {
-			LOG_WARN("Attempted to Retrieve Last Mouse Position with Nullptrs");
+			LOG_WARN("Cannot Store Last Mouse Position to Nullptr")
 		}
 	}
 
-	// Hook-Related Functions
-
-	void HookMouseMove(const Window::DPosCallback& callback) {
-		m_MouseMoveCallbacks.emplace_back(callback); 
-	}
-
-	void HookKeyPress(const Window::KeyCallback& callback) {
-		m_KeyPressCallbacks.emplace_back(callback);
-	}
-
-	void HookWindowResize(const Window::ISizeCallback& callback) {
-		m_WindowResizeCallbacks.emplace_back(callback);
-	}
-
-	void HookWindowFocus(const Window::FocusCallback& callback) {
-		m_WindowFocusCallbacks.emplace_back(callback); 
-	}
-
-	void HookMouseScroll(const Window::ScrollCallback& callback) {
-		m_MouseScrollCallbacks.emplace_back(callback);
+	EventDispatcher& GetEventDispatcher() {
+		return m_EventDispatcher; 
 	}
 
 protected:
-	std::string m_Title;
-	std::vector<Window::DPosCallback> m_MouseMoveCallbacks{};
-	std::vector<Window::KeyCallback> m_KeyPressCallbacks{};
-	std::vector<Window::ISizeCallback> m_WindowResizeCallbacks{};
-	std::vector<Window::FocusCallback> m_WindowFocusCallbacks{};
-	std::vector<Window::ScrollCallback> m_MouseScrollCallbacks{};
-
+	std::string m_Title{};
 	double m_LastMouseX = 0, m_LastMouseY = 0;
+	EventDispatcher m_EventDispatcher{}; 
 
 };
 

@@ -1,0 +1,8 @@
+﻿  EntryPoint.cpp
+  GLFWWindowCore.cpp
+  GLFWWindowHnd.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 123 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  3DEngine.vcxproj -> C:\Users\Zach\source\repos\3DEngine\x64\Release\3DEngine.exe

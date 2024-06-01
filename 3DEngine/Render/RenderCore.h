@@ -7,14 +7,23 @@
 #include "IO/ImageLoader.h"
 #include "IShader.h"
 #include "ITexture.h"
+#include "Mesh.h"
+
 #include "View/Camera.h"
 
 using std::unique_ptr; 
 
-struct RenderProfile {
-	const Camera& m_Camera;
-	const glm::mat4& m_Projection; 
-};
+namespace RenderUtil {
+	enum CullFace {
+		FRONT,
+		BACK,
+		FRONT_AND_BACK
+	};
+	enum FrontFace {
+		CW,
+		CCW
+	};
+}
 
 class RenderCore {
 
@@ -28,9 +37,15 @@ public:
 	virtual void OnFrame() = 0; 
 
 	virtual void SetViewport(int x, int y, int width, int height) = 0;
-	virtual void SetDepthTest(bool enable); 
+	virtual void SetCullFace(RenderUtil::CullFace cullFace) = 0; 
+	virtual void SetFrontFace(RenderUtil::FrontFace frontFace) = 0; 
 
-	virtual unique_ptr<IAttribLayout> CreateAttribLayout();
+	virtual void EnableDepthTesting(bool enabled) = 0;
+	virtual void EnableFaceCulling(bool enabled) = 0;
+	virtual void EnableWireframeMode(bool enabled) = 0; 
+
+	virtual unique_ptr<IAttribLayout> CreateAttribLayout() const = 0;
+	virtual unique_ptr<Mesh> CreateMesh() const = 0; 
 	virtual unique_ptr<IShader> CreateShader(std::string_view vertSource, 
 		std::string_view fragSource) const = 0;
 	virtual unique_ptr<ITexture> CreateTexture(const ImageLoader::ImageProfile& profile) const = 0;

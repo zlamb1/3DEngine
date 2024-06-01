@@ -1,0 +1,12 @@
+﻿  Player.cpp
+  GameEngine.cpp
+  GLAttribLayout.cpp
+  GLMesh.cpp
+  GLRenderCore.cpp
+  GLShader.cpp
+  GLTexture.cpp
+  FPCamera.cpp
+  TPCamera.cpp
+  GLFWWindowHnd.cpp
+  Generating Code...
+  3DEngine.vcxproj -> C:\Users\Zach\source\repos\3DEngine\x64\Debug\3DEngine.lib

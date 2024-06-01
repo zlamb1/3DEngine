@@ -1,6 +1,13 @@
 #include "GameEngine.h"
 
+#include <GLFW/glfw3.h>
+
 #include "Logger.h"
+
+#include "Event/Input/KeyPressEvent.h"
+#include "Event/Input/MouseMoveEvent.h"
+#include "Event/Input/MouseScrollEvent.h"
+#include "Event/Input/WindowResizeEvent.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak(); 
 
@@ -20,7 +27,7 @@ bool GameEngine::StartEngine() {
 	LOG_INFO(LOG_HEADER + "Initializing Engine")
 
 	ASSERT(m_WindowHnd)
-	ASSERT(m_Camera)
+	ASSERT(m_Player)
 	ASSERT(m_ImageLoader)
 
 	// init cores and window handle
@@ -47,37 +54,49 @@ bool GameEngine::StartEngine() {
 		m_KeyBuffer.emplace_back(false);
 	}
 
-	m_WindowHnd->HookMouseMove([&](double xpos, double ypos) {
+	const auto mouseMoveHandler = std::make_shared<EventHandler<MouseMoveEvent>>(
+		[&](const MouseMoveEvent& _event) {
+			if (m_WindowHnd->IsFocused()) {
+				m_Player->OnMouseMove(*m_WindowHnd, _event.xPos, _event.yPos);
+			}
+	});
+
+	m_WindowHnd->GetEventDispatcher().Subscribe<MouseMoveEvent>(mouseMoveHandler); 
+
+	const auto keyPressHandler = std::make_shared<EventHandler<KeyPressEvent>>(
+		[&](const KeyPressEvent& _event) {
+			// store key press to buffer
+			m_KeyBuffer[_event.button] = !_event.action ? false : true;
+	});
+
+	m_WindowHnd->GetEventDispatcher().Subscribe<KeyPressEvent>(keyPressHandler); 
+
+	const auto resizeHandler = std::make_shared<EventHandler<WindowResizeEvent>>(
+		[&](const WindowResizeEvent& _event) {
+			// resize viewport on window resize
+			m_RenderCore.SetViewport(0, 0, _event.width, _event.height);
+			// regenerate projection matrix
+			m_Projection = CameraUtility::CreateProjectionMatrix(FOV_Y,
+				m_WindowHnd->GetAspectRatio(), Z_NEAR, Z_FAR);
+	});
+
+	m_WindowHnd->GetEventDispatcher().Subscribe<WindowResizeEvent>(resizeHandler); 
+
+	const auto scrollHandler = std::make_shared<EventHandler<MouseScrollEvent>>(
+		[&](const MouseScrollEvent& _event) {
 		if (m_WindowHnd->IsFocused()) {
-			m_Camera->ProcessMouseMove(*m_WindowHnd, xpos, ypos);
+			m_Player->OnMouseScroll(*m_WindowHnd, 0, _event.direction);
 		}
 	});
 
-	m_WindowHnd->HookKeyPress([&](int key, int action) {
-		// store key press to buffer
-		m_KeyBuffer[key] = !action ? false : true;
-	});
-
-	m_WindowHnd->HookWindowResize([&](const int w, const int h) {
-		// resize viewport on window resize
-		m_RenderCore.SetViewport(0, 0, w, h);
-		// regenerate projection matrix
-		m_Projection = CameraUtility::CreateProjectionMatrix(FOV_Y,
-			m_WindowHnd->GetAspectRatio(), Z_NEAR, Z_FAR);
-	});
-
-	m_WindowHnd->HookMouseScroll([&](double xoffset, double yoffset) {
-		if (m_WindowHnd->IsFocused()) {
-			m_Camera->ProcessMouseScroll(*m_WindowHnd, xoffset, yoffset);
-		}
-	});
+	m_WindowHnd->GetEventDispatcher().Subscribe<MouseScrollEvent>(scrollHandler);
 
 	// init projection matrix
 	m_Projection = CameraUtility::CreateProjectionMatrix(FOV_Y,
 		m_WindowHnd->GetAspectRatio(), Z_NEAR, Z_FAR);
 
 	if (!SetupEngine()) {
-		LOG_ERROR(LOG_HEADER << "Failed to Setup Engine"); 
+		LOG_ERROR(LOG_HEADER << "Failed to Setup Engine")
 		return false;
 	}
 
@@ -85,15 +104,17 @@ bool GameEngine::StartEngine() {
 }
 
 void GameEngine::StartRenderLoop() {
+	glfwSwapInterval(0);
 	while (!m_WindowHnd->QueryCloseRequested()) {
 		// notify render core of frame
 		m_RenderCore.OnFrame();
 		// render frame
-		OnFrame(); 
+		OnFrame();
 		// clean up
 		m_WindowHnd->SwapBuffers();
 		m_WindowCore.PollEvents();
-		m_Camera->ProcessKeyInput(*m_WindowHnd, m_KeyBuffer);
+		m_Player->OnFrame(m_KeyBuffer, m_FrameTime);
+		m_FrameTime.OnFrame();
 	}
 }
 

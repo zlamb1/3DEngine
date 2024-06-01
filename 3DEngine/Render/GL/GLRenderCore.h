@@ -39,10 +39,17 @@ public:
 	void OnFrame() override; 
 
 	void SetViewport(int x, int y, int width, int height) override;
-	void SetDepthTest(bool enable) override;
+	void SetCullFace(RenderUtil::CullFace cullFace) override;
+	void SetFrontFace(RenderUtil::FrontFace frontFace) override;
 
-	unique_ptr<IAttribLayout> CreateAttribLayout() override;
-	unique_ptr<IShader> CreateShader(std::string_view vertSource, std::string_view fragSource) const override;
+	void EnableDepthTesting(bool enabled) override;
+	void EnableFaceCulling(bool enabled) override;
+	void EnableWireframeMode(bool enabled) override;
+
+	unique_ptr<IAttribLayout> CreateAttribLayout() const override;
+	unique_ptr<Mesh> CreateMesh() const override;
+	unique_ptr<IShader> CreateShader(std::string_view vertSource, 
+		std::string_view fragSource) const override;
 	unique_ptr<ITexture> CreateTexture(const ImageLoader::ImageProfile& profile) const override;
 
 private:
