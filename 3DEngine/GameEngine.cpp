@@ -54,42 +54,36 @@ bool GameEngine::StartEngine() {
 		m_KeyBuffer.emplace_back(false);
 	}
 
-	const auto mouseMoveHandler = std::make_shared<EventHandler<MouseMoveEvent>>(
+	auto& eventHandler = m_WindowHnd->GetEventDispatcher();
+	eventHandler.Subscribe<MouseMoveEvent>(
+		std::make_shared<EventHandler<MouseMoveEvent>>(
 		[&](const MouseMoveEvent& _event) {
 			if (m_WindowHnd->IsFocused()) {
 				m_Player->OnMouseMove(*m_WindowHnd, _event.xPos, _event.yPos);
 			}
-	});
-
-	m_WindowHnd->GetEventDispatcher().Subscribe<MouseMoveEvent>(mouseMoveHandler); 
-
-	const auto keyPressHandler = std::make_shared<EventHandler<KeyPressEvent>>(
+	}));
+	eventHandler.Subscribe<KeyPressEvent>(
+		std::make_shared<EventHandler<KeyPressEvent>>(
 		[&](const KeyPressEvent& _event) {
 			// store key press to buffer
 			m_KeyBuffer[_event.button] = !_event.action ? false : true;
-	});
-
-	m_WindowHnd->GetEventDispatcher().Subscribe<KeyPressEvent>(keyPressHandler); 
-
-	const auto resizeHandler = std::make_shared<EventHandler<WindowResizeEvent>>(
+	}));
+	eventHandler.Subscribe<WindowResizeEvent>(
+		std::make_shared<EventHandler<WindowResizeEvent>>(
 		[&](const WindowResizeEvent& _event) {
 			// resize viewport on window resize
 			m_RenderCore.SetViewport(0, 0, _event.width, _event.height);
 			// regenerate projection matrix
 			m_Projection = CameraUtility::CreateProjectionMatrix(FOV_Y,
 				m_WindowHnd->GetAspectRatio(), Z_NEAR, Z_FAR);
-	});
-
-	m_WindowHnd->GetEventDispatcher().Subscribe<WindowResizeEvent>(resizeHandler); 
-
-	const auto scrollHandler = std::make_shared<EventHandler<MouseScrollEvent>>(
+	}));
+	eventHandler.Subscribe<MouseScrollEvent>(
+		std::make_shared<EventHandler<MouseScrollEvent>>(
 		[&](const MouseScrollEvent& _event) {
-		if (m_WindowHnd->IsFocused()) {
-			m_Player->OnMouseScroll(*m_WindowHnd, 0, _event.direction);
-		}
-	});
-
-	m_WindowHnd->GetEventDispatcher().Subscribe<MouseScrollEvent>(scrollHandler);
+			if (m_WindowHnd->IsFocused()) {
+				m_Player->OnMouseScroll(*m_WindowHnd, 0, _event.direction);
+			}
+	}));
 
 	// init projection matrix
 	m_Projection = CameraUtility::CreateProjectionMatrix(FOV_Y,

@@ -15,7 +15,7 @@ public:
 
 	template <typename T>
 	void Unsubscribe(std::shared_ptr<IEventHandler> eventHandler) {
-		auto vec = m_Callbacks[typeid(T).name()];
+		auto& vec = m_Callbacks[typeid(T).name()];
 		for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
 			if (*iter == eventHandler) {
 				vec.erase(iter);
@@ -27,9 +27,8 @@ public:
 	template <typename T>
 	void Dispatch(const IEvent& _event) const {
 		const char* name = typeid(T).name();
-		// no handlers subscribed to the event
+		// no handlers subscribed to the event or invalid type
 		if (m_Callbacks.find(name) == m_Callbacks.end()) return;
-		// found handlers
 		for (const auto& eventHandler : 
 			m_Callbacks.at(name)) {
 			eventHandler->Dispatch(_event);

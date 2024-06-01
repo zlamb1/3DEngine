@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "Event/Input/MouseMoveEvent.h"
+#include "Event/Input/WindowResizeEvent.h"
 
 #include "IO/FileReader.h"
 #include "IO/STB/STBImageLoader.h"
@@ -50,12 +51,12 @@ bool BlockGameEngine::SetupEngine() {
 
 	m_WindowHnd->SetCursorHidden(true);
 
-	const auto mouseMoveHandler = std::make_shared<EventHandler<MouseMoveEvent>>(
+	auto& eventDispatcher = m_WindowHnd->GetEventDispatcher();
+	eventDispatcher.Subscribe<MouseMoveEvent>(
+		std::make_shared<EventHandler<MouseMoveEvent>>(
 		[&](const MouseMoveEvent& _event) {
 			m_WindowHnd->SetCursorCentered();
-	});
-
-	m_WindowHnd->GetEventDispatcher().Subscribe<MouseMoveEvent>(mouseMoveHandler);
+	}));
 
 	m_RenderCore.EnableFaceCulling(true);
 
