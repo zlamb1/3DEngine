@@ -13,7 +13,7 @@ public:
 	void DrawMesh() const override;
 
 	void BufferData(unsigned int vertexCount, unsigned int vertexSize, 
-		const void* data, MeshInfo::UsageType usageType) override;
+		const void* data, DrawUsage drawUsage) override;
 
 private:
 	unsigned int m_VBO; 

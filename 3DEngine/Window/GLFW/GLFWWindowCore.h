@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-
 #include "Window/IWindowCore.h"
 
 class GLFWWindowCore: public IWindowCore {
@@ -15,7 +13,10 @@ public:
 	bool InitializeCore() override;
 	void ShutdownCore() override;
 
-	void PollEvents() override; 
+	void PollEvents() override;
+
+	Key ParseKeyCode(int key) override;
+	KeyAction ParseKeyAction(int action) override; 
 
 private:
 	GLFWWindowCore() = default;

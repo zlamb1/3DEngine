@@ -3,7 +3,8 @@
 class ITexture {
 
 public:
-	virtual ~ITexture() = default; 
-	virtual void BindTexture() const = 0; 
+	virtual ~ITexture() = default;
+
+	virtual void Bind() const = 0; 
 
 };

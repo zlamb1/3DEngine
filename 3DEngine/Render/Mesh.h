@@ -1,11 +1,9 @@
 #pragma once
 
-namespace MeshInfo {
-	enum UsageType {
-		STATIC,
-		DYNAMIC
-	};
-}
+enum class DrawUsage : int {
+	STATIC, DYNAMIC
+};
+
 
 class Mesh {
 
@@ -17,7 +15,7 @@ public:
 	virtual void DrawMesh() const = 0;
 
 	virtual void BufferData(unsigned int vertexCount, unsigned int vertexSize, 
-		const void* data, MeshInfo::UsageType usageType) = 0;
+		const void* data, DrawUsage drawUsage) = 0;
 
 protected:
 	unsigned int m_VertexCount = 0; 

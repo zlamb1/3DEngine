@@ -3,11 +3,13 @@
 #include <memory>
 #include <vector>
 
+#include "Ref.h"
+
 #include "Render/Mesh.h"
 
 constexpr int CHUNK_WIDTH = 32, CHUNK_DEPTH = 32, CHUNK_HEIGHT = 16;
 
-namespace ChunkUtil {
+namespace ChunkUtilty {
 	static int PositionToIndex(int x, int y, int z) {
 		return z + (y * CHUNK_DEPTH) + (x * CHUNK_DEPTH * CHUNK_HEIGHT);
 	}
@@ -22,7 +24,7 @@ namespace ChunkUtil {
 class Chunk {
 
 public:
-	Chunk(std::unique_ptr<Mesh> chunkMesh);
+	Chunk(Ref<Mesh> chunkMesh);
 
 	void CreateMesh() const; 
 	void DrawChunk() const; 
@@ -30,5 +32,5 @@ public:
 private:
 	int m_X = 0, m_Y = 0, m_Z = 0; 
 	std::vector<unsigned short> m_Blocks{}; 
-	std::unique_ptr<Mesh> m_ChunkMesh; 
+	Ref<Mesh> m_ChunkMesh; 
 };

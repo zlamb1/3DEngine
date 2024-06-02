@@ -2,25 +2,30 @@
 
 #include <memory>
 
+#include "Ref.h"
+
+#include "Event/Input/KeyPressEvent.h"
+#include "Event/Input/MouseScrollEvent.h"
+
+#include "Time/FrameTime.h"
+
 #include "View/Camera.h"
 
 class Player {
 
 public:
-	Player(std::unique_ptr<Camera> camera); 
+	Player(Scope<Camera> camera); 
 
-	void OnFrame(const std::vector<bool>& keyBuffer, const FrameTime& frameTime);
-	void OnMouseMove(const WindowHnd& window, double xpos, double ypos) const;
-	void OnMouseScroll(const WindowHnd& window, double xoffset, double yoffset) const; 
+	void OnFrame(const std::vector<KeyAction>& keyBuffer, const FrameTime& frameTime);
+	void OnMouseMove(const WindowHnd& window, const Vec2d& position) const;
+	void OnMouseScroll(const WindowHnd& window, const ScrollDirection& scrollDir) const;
 
-	float& MouseSensitivity() const;
-
-	glm::mat4 CreateViewMatrix() const;
+	Camera& GetCamera() const; 
 
 private:
 	float m_MovementSpeed = 1.0f, m_ExpFriction = 0.995f; 
 
-	std::unique_ptr<Camera> m_Camera;
+	Scope<Camera> m_Camera;
 	glm::vec3 m_Velocity{};
 
 };

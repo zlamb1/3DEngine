@@ -1,10 +1,8 @@
 #pragma once
 
-namespace ShaderAttrib {
-	enum AttribType {
-		FLOAT
-	};
-}
+enum class AttribType : int {
+	FLOAT
+};
 
 class IAttribLayout {
 
@@ -17,7 +15,7 @@ public:
 	virtual void DisableAttrib(unsigned int attribindex) const = 0;
 
 	virtual void AttribFormat(unsigned int attribindex, int size,
-		ShaderAttrib::AttribType type, bool normalized, unsigned int relativeoffset) const = 0;
+		AttribType type, bool normalized, unsigned int relativeoffset) const = 0;
 	virtual void AttribBinding(unsigned int attribindex, unsigned int bindingindex) const = 0;
 
 };

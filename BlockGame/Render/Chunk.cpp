@@ -1,7 +1,5 @@
 #include "Chunk.h"
 
-#include <iostream>
-
 #include "Vertex.h"
 
 constexpr float CUBE_POSITIONS[] {
@@ -25,7 +23,7 @@ constexpr float CUBE_POSITIONS[] {
 	0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, -0.5f
 };
 
-Chunk::Chunk(std::unique_ptr<Mesh> chunkMesh) : m_ChunkMesh(std::move(chunkMesh)) {
+Chunk::Chunk(Ref<Mesh> chunkMesh) : m_ChunkMesh(std::move(chunkMesh)) {
 	for (int x = 0; x < CHUNK_WIDTH; x++) {
 		for (int y = 0; y < CHUNK_HEIGHT; y++) {
 			for (int z = 0; z < CHUNK_DEPTH; z++) {
@@ -45,7 +43,7 @@ void Chunk::CreateMesh() const {
 
 	for (int blockindex = 0; blockindex < static_cast<int>(m_Blocks.size()); blockindex++) {
 		int x, y, z;
-		ChunkUtil::IndexToPosition(blockindex, &x, &y, &z);
+		ChunkUtilty::IndexToPosition(blockindex, &x, &y, &z);
 		for (int face = 0; face < 6; face++) {
 			const int index = face * 18;
 			for (int j = index; j < index + 18; j += 3) {
@@ -61,7 +59,7 @@ void Chunk::CreateMesh() const {
 	}
 
 	m_ChunkMesh->BufferData(static_cast<int>(data.size()), sizeof(Vertex),
-		&data[0], MeshInfo::STATIC);
+		&data[0], DrawUsage::STATIC);
 }
 
 

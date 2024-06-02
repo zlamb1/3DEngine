@@ -8,9 +8,9 @@ class GLShader: public IShader {
 
 public:
 	GLShader(std::string_view vertSource, std::string_view fragSource);
-	virtual ~GLShader() override;
+	~GLShader() override;
 
-	void BindShader() const override;
+	void Bind() const override;
 
 	int QueryUniformLocation(std::string_view name) const override;
 	void SetMatrix4fv(std::string_view name, const glm::mat4& matrix) const override;

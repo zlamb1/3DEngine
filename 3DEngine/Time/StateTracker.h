@@ -14,9 +14,7 @@ template<typename T>
 class StateTracker {
 
 public:
-	StateTracker() {}
-	StateTracker(double delay) : m_Delay(delay) {}
-	StateTracker(double delay, bool allowRepeat) : m_Delay(delay), m_AllowRepeat(allowRepeat) {}
+	StateTracker(T initialState, double delay) : m_State(initialState), m_Delay(delay) {}
 
 	T GetState() const {
 		return m_State; 
@@ -36,7 +34,7 @@ public:
 
 private:
 	T m_State;
-	double m_Delay = 0, m_LastChange;
+	double m_Delay = 0, m_LastChange = 0;
 	bool m_AllowRepeat = true;
 
 };

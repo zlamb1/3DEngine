@@ -2,15 +2,17 @@
 
 #include <string>
 
+struct ImageInfo {
+	unsigned char* m_ImageData;
+	int m_ImageWidth, m_ImageHeight, m_ImageChannels;
+};
+
 class ImageLoader {
 
 public:
-	struct ImageProfile {
-		unsigned char* m_ImageData; 
-		int m_ImageWidth, m_ImageHeight, m_ImageChannels; 
-	};
+	virtual ~ImageLoader() = default; 
 
-	virtual ImageProfile LoadImageFromPath(const std::string& path) const = 0;
-	virtual void FreeImageData(ImageProfile& profile) const = 0;
+	virtual ImageInfo LoadImageFromPath(const std::string& path) const = 0;
+	virtual void FreeImageData(ImageInfo& profile) const = 0;
 
 };

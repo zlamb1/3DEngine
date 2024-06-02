@@ -1,11 +1,11 @@
 #pragma once
 #include "Event/IEvent.h"
 
-enum MouseScrollDirection {
+enum ScrollDirection {
 	UP, DOWN
 };
 
 struct MouseScrollEvent : IEvent {
-	MouseScrollEvent(MouseScrollDirection direction) : direction(direction) {}
-	MouseScrollDirection direction;
+	MouseScrollEvent(ScrollDirection direction) : direction(direction) {}
+	ScrollDirection direction;
 };

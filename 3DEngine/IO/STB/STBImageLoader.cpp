@@ -7,20 +7,20 @@
 
 STBImageLoader::STBImageLoader(bool verticallyFlipImage) : m_VerticallyFlipImage(verticallyFlipImage) {}
 
-ImageLoader::ImageProfile STBImageLoader::LoadImageFromPath(const std::string& path) const {
+ImageInfo STBImageLoader::LoadImageFromPath(const std::string& path) const {
 	stbi_set_flip_vertically_on_load(m_VerticallyFlipImage);
-	ImageLoader::ImageProfile profile{};
-	profile.m_ImageData = stbi_load(path.c_str(),
-		&profile.m_ImageWidth, &profile.m_ImageHeight, &profile.m_ImageChannels, 0);
-	if (!profile.m_ImageData) {
+	ImageInfo imageInfo; 
+	imageInfo.m_ImageData = stbi_load(path.c_str(),
+		&imageInfo.m_ImageWidth, &imageInfo.m_ImageHeight, &imageInfo.m_ImageChannels, 0);
+	if (!imageInfo.m_ImageData) {
 		// image load failed
-		LOG_WARN("[STBImageLoader] Failed to Load Image at Path: " << path); 
+		LOG_WARN("[STBImageLoader] Failed to Load Image at Path: " << path)
 	}
 
-	return profile; 
+	return imageInfo;
 }
 
-void STBImageLoader::FreeImageData(ImageProfile& profile) const {
-	if (profile.m_ImageData) stbi_image_free(profile.m_ImageData);
-	else LOG_WARN("[STBImageLoader] Attempt to Free Nullptr Image Data"); 
+void STBImageLoader::FreeImageData(ImageInfo& imageInfo) const {
+	if (imageInfo.m_ImageData) stbi_image_free(imageInfo.m_ImageData);
+	else LOG_WARN("[STBImageLoader] Attempt to Free Nullptr Image Data")
 }

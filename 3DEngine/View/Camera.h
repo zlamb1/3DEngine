@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
-#include "Time/FrameTime.h"
+#include "Event/Input/MouseScrollEvent.h"
+#include "..\Math\Vec2d.h"
 #include "Window/WindowHnd.h"
 
 namespace CameraUtility {
@@ -28,26 +28,30 @@ class Camera {
 public:
 	virtual ~Camera() = default;
 
-	virtual glm::mat4 CreateViewMatrix() const = 0;
-	virtual void ProcessMouseMove(const WindowHnd& window, double xpos, double ypos) {}
-	virtual void ProcessMouseScroll(const WindowHnd& window, double xoffset, double yoffset) {}
+	virtual void OnMouseMove(const WindowHnd& window, const Vec2d& position) {} 
+	virtual void OnMouseScroll(const WindowHnd& window, const ScrollDirection& scrollDir) {}
 
-	glm::vec3& Position() {
-		return m_Position; 
-	}
+	virtual void UpdateViewModel() = 0;
 
-	glm::vec3& Rotation() {
-		return m_Rotation; 
-	}
+	const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+	const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+	const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
-	float& MouseSensitivity() {
-		return m_MouseSens; 
-	}
+	const glm::vec3& GetPosition() const { return m_Position; }
+	void SetPosition(const glm::vec3& newPosition) { m_Position = newPosition; }
+
+	const glm::vec3 GetRotation() const { return m_Rotation; }
+	void SetRotation(const glm::vec3& newRotation) { m_Rotation = newRotation; }
+
+	const float& GetSensitivity() const { return m_MouseSens; }
+	void SetSensitivity(float newSens) { m_MouseSens = newSens; }
 
 protected:
 	float m_MouseSens = 0.01f;
+	glm::mat4 m_ProjectionMatrix{}, m_ViewMatrix{}, m_ViewProjectionMatrix{};
 	glm::vec3 m_Position{}, m_Rotation{};
 
+protected:
 	void ClampPitch() {
 		if (m_Rotation.y >= glm::radians(90.0f)) m_Rotation.y = glm::radians(89.99f);
 		if (m_Rotation.y <= glm::radians(-90.0f)) m_Rotation.y = glm::radians(-89.99f);

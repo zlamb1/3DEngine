@@ -14,9 +14,11 @@ public:
 	void OnFrame() override;
 
 private:
-	std::unique_ptr<IAttribLayout> m_ShaderLayout;
-	std::unique_ptr<IShader> m_ChunkShader;
-	std::unique_ptr<Chunk> m_Chunk; 
+	Ref<IAttribLayout> m_ShaderLayout;
+	Ref<IShader> m_ChunkShader;
+	Ref<Chunk> m_Chunk; 
 
-	StateTracker<bool> m_Wireframe{ 0.3 }; 
+	Scope<Player> m_Player;
+
+	StateTracker<bool> m_Wireframe{ false, 0.3 }; 
 };

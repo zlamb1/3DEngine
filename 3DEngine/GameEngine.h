@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Ref.h"
+
 #include "Entity/Player.h"
 
 #include "Window/IWindowCore.h"
@@ -11,7 +13,7 @@
 class GameEngine {
 
 public:
-	GameEngine(IWindowCore& windowCore, RenderCore& renderCore); 
+	GameEngine(IWindowCore& windowCore); 
 	virtual ~GameEngine() = default;
 
 	bool StartEngine();
@@ -22,17 +24,22 @@ public:
 	virtual void OnFrame() = 0; 
 
 protected:
+	static RenderCore& GetRenderCore(); 
+
+protected:
 	IWindowCore& m_WindowCore;
-	RenderCore& m_RenderCore;
 
-	std::unique_ptr<Player> m_Player = nullptr; 
+	Ref<WindowHnd> m_Window;
+	Ref<ImageLoader> m_ImageLoader;
 
-	std::shared_ptr<WindowHnd> m_WindowHnd = nullptr;
-	std::shared_ptr<ImageLoader> m_ImageLoader = nullptr;
+	std::vector<KeyAction> m_KeyBuffer{};
 
-	std::vector<bool> m_KeyBuffer{};
+	float m_AspectRatio = 0.0f; 
 	glm::mat4 m_Projection{};
 
 	FrameTime m_FrameTime{};
+
+private:
+	void CreateProjectionMatrix(); 
 
 };

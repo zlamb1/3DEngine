@@ -14,7 +14,7 @@ public:
 	void DisableAttrib(unsigned attribindex) const override;
 
 	void AttribFormat(unsigned int attribindex, int size,
-		ShaderAttrib::AttribType type, bool normalized, unsigned relativeoffset) const override;
+		AttribType type, bool normalized, unsigned relativeoffset) const override;
 	void AttribBinding(unsigned int attribindex, unsigned int bindingindex) const override;
 
 private:

@@ -26,13 +26,13 @@ void GLMesh::DrawMesh() const {
 }
 
 void GLMesh::BufferData(unsigned int vertexCount, unsigned int vertexSize, 
-	const void* data, MeshInfo::UsageType usageType) {
+	const void* data, DrawUsage drawUsage) {
 	GLenum usage = GL_STATIC_DRAW;
-	switch (usageType) {
-		case MeshInfo::STATIC:
+	switch (drawUsage) {
+		case DrawUsage::STATIC:
 			usage = GL_STATIC_DRAW;
 			break;
-		case MeshInfo::DYNAMIC:
+		case DrawUsage::DYNAMIC:
 			usage = GL_DYNAMIC_DRAW;
 			break;
 	}

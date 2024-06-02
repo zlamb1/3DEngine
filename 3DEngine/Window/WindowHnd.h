@@ -1,27 +1,27 @@
 #pragma once
 
-#include <functional>
 #include <string>
-#include <vector>
 
 #include "Logger.h"
 
 #include "Event/EventDispatcher.h"
 
-namespace Window {
-	struct InitFlags {
-		bool m_Maximized = false;
-		int m_Width = 500;
-		int m_Height = 500;
-	};
+#include "Math/Vec2d.h"	
 
-	typedef std::function<void(double, double)> DPosCallback;
-	typedef std::function<void(int, int)> ISizeCallback;
+struct WindowSettings {
+	int width = 500, height = 500;
+	bool resizable = true, visible = true, decorated = true,
+		focused = true, autoIconify = false, floating = false,
+		maximized = false, centerCursor = true,
+		transparentFramebuffer = false, focusOnShow = true,
+		scaleToMonitor = true;
+};
 
-	typedef std::function<void(int, int)> KeyCallback;
-	typedef std::function<void(bool)> FocusCallback;
-	typedef std::function<void(double, double)> ScrollCallback;
-}
+enum class WindowAttrib : int {
+	FOCUSED, ICONIFIED, MAXIMIZED, VISIBLE, RESIZABLE,
+	DECORATED, AUTO_ICONIFY, FLOATING, TRANSPARENT_FRAMEBUFFER,
+	FOCUS_ON_SHOW,
+};
 
 class WindowHnd {
 
@@ -33,15 +33,18 @@ public:
 	virtual ~WindowHnd() = default;
 
 	virtual bool InitializeWindow() = 0;
-	virtual bool InitializeWindow(const Window::InitFlags& flags) = 0;
+	virtual bool InitializeWindow(const WindowSettings& flags) = 0;
 	virtual bool QueryCloseRequested() const = 0; 
 	virtual void SwapBuffers() const = 0;
 
 	// Window-Related Functions
 	
 	virtual void GetWindowSize(int* width, int* height) const = 0;
+
 	virtual float GetAspectRatio() const = 0;
-	virtual bool IsFocused() const = 0;
+
+	virtual bool GetWindowAttrib(const WindowAttrib& attrib) const = 0;
+	virtual void SetWindowAttrib(const WindowAttrib& attrib, bool state) = 0; 
 
 	virtual void DestroyWindow() = 0; 
 
@@ -57,14 +60,8 @@ public:
 	virtual void SetCursorCentered() = 0;
 	virtual void SetCursorHidden(bool hidden) = 0;
 
-	virtual void GetLastMousePos(double* xPos, double* yPos) const {
-		if (xPos && yPos) {
-			*xPos = m_LastMouseX;
-			*yPos = m_LastMouseY;
-		} else {
-			LOG_WARN("Cannot Store Last Mouse Position to Nullptr")
-		}
-	}
+	const Vec2d& GetLastMousePosition() const { return m_MousePosition; }
+	void SetLastMousePosition(const Vec2d& newPosition) { m_MousePosition = newPosition; }
 
 	EventDispatcher& GetEventDispatcher() {
 		return m_EventDispatcher; 
@@ -72,7 +69,7 @@ public:
 
 protected:
 	std::string m_Title{};
-	double m_LastMouseX = 0, m_LastMouseY = 0;
+	Vec2d m_MousePosition{}; 
 	EventDispatcher m_EventDispatcher{}; 
 
 };

@@ -25,10 +25,10 @@ void GLAttribLayout::DisableAttrib(unsigned attribindex) const {
 }
 
 void GLAttribLayout::AttribFormat(unsigned int attribindex, int size, 
-	ShaderAttrib::AttribType type, bool normalized, unsigned relativeoffset) const {
+	AttribType type, bool normalized, unsigned relativeoffset) const {
 	GLenum glType = GL_FLOAT;
 	switch (type) {
-		case ShaderAttrib::FLOAT:
+		case AttribType::FLOAT:
 			glType = GL_FLOAT;
 			break;
 	}

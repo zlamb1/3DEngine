@@ -21,31 +21,31 @@
     <ClCompile Include="Window\GLFW\GLFWWindowCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\GL\GLRenderCore.cpp">
+    <ClCompile Include="Render\OpenGL\GLRenderCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\GL\GLShader.cpp">
+    <ClCompile Include="Render\OpenGL\GLShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="View\FPCamera.cpp">
+    <ClCompile Include="View\Perspective\FPCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="View\TPCamera.cpp">
+    <ClCompile Include="View\Perspective\TPCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\GL\GLTexture.cpp">
+    <ClCompile Include="Render\OpenGL\GLTexture2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IO\STB\STBImageLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\GL\GLAttribLayout.cpp">
+    <ClCompile Include="Render\OpenGL\GLAttribLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\GL\GLMesh.cpp">
+    <ClCompile Include="Render\OpenGL\GLMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Time\FrameTime.cpp">
@@ -55,6 +55,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\lib\glad\src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RendererAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\ITexture2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\IShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +83,7 @@
     <ClInclude Include="Render\RenderCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\GL\GLRenderCore.h">
+    <ClInclude Include="Render\OpenGL\GLRenderCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
@@ -83,22 +92,22 @@
     <ClInclude Include="GameEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\GL\GLShader.h">
+    <ClInclude Include="Render\OpenGL\GLShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="View\FPCamera.h">
+    <ClInclude Include="View\Perspective\FPCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="View\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="View\TPCamera.h">
+    <ClInclude Include="View\Perspective\TPCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\ITexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\GL\GLTexture.h">
+    <ClInclude Include="Render\OpenGL\GLTexture2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IO\ImageLoader.h">
@@ -116,13 +125,13 @@
     <ClInclude Include="Render\IAttribLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\GL\GLAttribLayout.h">
+    <ClInclude Include="Render\OpenGL\GLAttribLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\GL\GLMesh.h">
+    <ClInclude Include="Render\OpenGL\GLMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Time\FrameTime.h">
@@ -156,6 +165,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Event\Input\MouseScrollEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vec2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ref.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\ITexture2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RendererAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

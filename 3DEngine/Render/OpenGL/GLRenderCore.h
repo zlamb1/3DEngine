@@ -19,7 +19,7 @@
 
 static bool GLLogError() {
 	while (const GLenum error = glGetError()) {
-		LOG_ERROR("[RenderCore] : OpenGL error: " + std::to_string(error));
+		LOG_ERROR("[RenderCore] : OpenGL error: " + std::to_string(error))
 		return false;
 	}
 	return true;
@@ -39,18 +39,18 @@ public:
 	void OnFrame() override; 
 
 	void SetViewport(int x, int y, int width, int height) override;
-	void SetCullFace(RenderUtil::CullFace cullFace) override;
-	void SetFrontFace(RenderUtil::FrontFace frontFace) override;
+	void SetCullFace(FaceType faceType) override;
+	void SetFrontFace(WindingOrder windingOrder) override;
 
 	void EnableDepthTesting(bool enabled) override;
 	void EnableFaceCulling(bool enabled) override;
 	void EnableWireframeMode(bool enabled) override;
 
-	unique_ptr<IAttribLayout> CreateAttribLayout() const override;
-	unique_ptr<Mesh> CreateMesh() const override;
-	unique_ptr<IShader> CreateShader(std::string_view vertSource, 
+	Ref<IAttribLayout> CreateAttribLayout() const override;
+	Ref<Mesh> CreateMesh() const override;
+	Ref<IShader> CreateShader(std::string_view vertSource,
 		std::string_view fragSource) const override;
-	unique_ptr<ITexture> CreateTexture(const ImageLoader::ImageProfile& profile) const override;
+	Ref<ITexture> CreateTexture2D(const ImageInfo& imageInfo) const override;
 
 private:
 	GLRenderCore() = default;

@@ -7,8 +7,8 @@ class STBImageLoader: public ImageLoader {
 public:
 	STBImageLoader(bool verticallyFlipImage); 
 
-	ImageProfile LoadImageFromPath(const std::string& path) const override;
-	void FreeImageData(ImageProfile& profile) const override; 
+	ImageInfo LoadImageFromPath(const std::string& path) const override;
+	void FreeImageData(ImageInfo& imageInfo) const override;
 
 private:
 	bool m_VerticallyFlipImage = true; 

@@ -1,5 +1,7 @@
 #include "GLFWWindowHnd.h"
 
+#include "GLFWWindowCore.h"
+
 #include "Event/Input/KeyPressEvent.h"
 #include "Event/Input/MouseMoveEvent.h"
 #include "Event/Input/MouseScrollEvent.h"
@@ -15,14 +17,25 @@ GLFWWindowHnd::~GLFWWindowHnd() {
 }
 
 bool GLFWWindowHnd::InitializeWindow() {
-	return InitializeWindow(Window::InitFlags{});
+	return InitializeWindow(WindowSettings{});
 }
 
-bool GLFWWindowHnd::InitializeWindow(const Window::InitFlags& flags) {
+bool GLFWWindowHnd::InitializeWindow(const WindowSettings& settings) {
 	// set window creation hints
-	glfwWindowHint(GLFW_MAXIMIZED, flags.m_Maximized);
+	glfwWindowHint(GLFW_RESIZABLE, settings.resizable);
+	glfwWindowHint(GLFW_VISIBLE, settings.visible);
+	glfwWindowHint(GLFW_DECORATED, settings.decorated);
+	glfwWindowHint(GLFW_FOCUSED, settings.focused);
+	glfwWindowHint(GLFW_AUTO_ICONIFY, settings.autoIconify);
+	glfwWindowHint(GLFW_FLOATING, settings.floating);
+	glfwWindowHint(GLFW_MAXIMIZED, settings.maximized);
+	glfwWindowHint(GLFW_CENTER_CURSOR, settings.centerCursor);
+	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparentFramebuffer);
+	glfwWindowHint(GLFW_FOCUS_ON_SHOW, settings.focusOnShow);
+	glfwWindowHint(GLFW_SCALE_TO_MONITOR, settings.scaleToMonitor); 
 	// create glfw window ptr
-	m_WindowPtr = glfwCreateWindow(flags.m_Width, flags.m_Height, m_Title.c_str(), 
+	m_WindowPtr = glfwCreateWindow(settings.width, settings.height, 
+		m_Title.c_str(),
 		nullptr, nullptr);
 	// check ptr
 	if (!m_WindowPtr) return false;
@@ -58,8 +71,17 @@ float GLFWWindowHnd::GetAspectRatio() const {
 	return static_cast<float>(width) / static_cast<float>(height); 
 }
 
-bool GLFWWindowHnd::IsFocused() const {
-	return glfwGetWindowAttrib(m_WindowPtr, GLFW_FOCUSED);
+bool GLFWWindowHnd::GetWindowAttrib(const WindowAttrib& attrib) const {
+	const auto glfwAttrib = Window::ParseWindowAttrib(attrib);
+	if (glfwAttrib == -1) return false;
+	return glfwGetWindowAttrib(m_WindowPtr, glfwAttrib); 
+}
+
+void GLFWWindowHnd::SetWindowAttrib(const WindowAttrib& attrib, bool state) {
+	const auto glfwAttrib = Window::ParseWindowAttrib(attrib);
+	if (glfwAttrib == -1) return; 
+	glfwSetWindowAttrib(m_WindowPtr, glfwAttrib, 
+		state ? GLFW_TRUE : GLFW_FALSE);
 }
 
 void GLFWWindowHnd::DestroyWindow() {
@@ -84,21 +106,18 @@ void GLFWWindowHnd::SetCursorHidden(bool hidden) {
 	glfwSetInputMode(m_WindowPtr, GLFW_CURSOR, hidden ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
 }
 
-void GLFWWindowHnd::SetLastMousePosition(double xpos, double ypos) {
-	m_LastMouseX = xpos;
-	m_LastMouseY = ypos; 
-}
-
 void GLFWWindowHnd::OnMouseMove(GLFWwindow* window, double xPos, double yPos) {
 	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
 	const MouseMoveEvent _event{ xPos, yPos };
 	windowHnd->GetEventDispatcher().Dispatch<MouseMoveEvent>(_event); 
-	windowHnd->SetLastMousePosition(xPos, yPos); 
+	windowHnd->SetLastMousePosition({xPos, yPos}); 
 }
 
 void GLFWWindowHnd::OnKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
-	const KeyPressEvent _event{ key, action };
+	auto& windowCore = GLFWWindowCore::Instance(); 
+	const KeyPressEvent _event{ windowCore.ParseKeyCode(key),
+		windowCore.ParseKeyAction(action) };
 	windowHnd->GetEventDispatcher().Dispatch<KeyPressEvent>(_event); 
 }
 
@@ -116,7 +135,7 @@ void GLFWWindowHnd::OnWindowFocus(GLFWwindow* window, int focused) {
 
 void GLFWWindowHnd::OnMouseScroll(GLFWwindow* window, double xoffset, double yoffset) {
 	auto* windowHnd = static_cast<GLFWWindowHnd*>(glfwGetWindowUserPointer(window));
-	const MouseScrollDirection direction = static_cast<bool>(yoffset) ? UP : DOWN;
+	const ScrollDirection direction = static_cast<bool>(yoffset) ? UP : DOWN;
 	const MouseScrollEvent _event{ direction };
 	windowHnd->GetEventDispatcher().Dispatch<MouseScrollEvent>(_event); 
 }

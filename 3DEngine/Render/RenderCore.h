@@ -2,28 +2,22 @@
 
 #include <memory>
 
-#include "IAttribLayout.h"
+#include "ITexture2D.h"
+#include "Ref.h"
 
 #include "IO/ImageLoader.h"
-#include "IShader.h"
-#include "ITexture.h"
-#include "Mesh.h"
 
-#include "View/Camera.h"
+#include "Render/IAttribLayout.h"
+#include "Render/IShader.h"
+#include "Render/Mesh.h"
 
-using std::unique_ptr; 
+enum class FaceType : int {
+	FRONT, BACK, FRONT_AND_BACK
+};
 
-namespace RenderUtil {
-	enum CullFace {
-		FRONT,
-		BACK,
-		FRONT_AND_BACK
-	};
-	enum FrontFace {
-		CW,
-		CCW
-	};
-}
+enum class WindingOrder : int {
+	CW, CCW
+};
 
 class RenderCore {
 
@@ -37,18 +31,18 @@ public:
 	virtual void OnFrame() = 0; 
 
 	virtual void SetViewport(int x, int y, int width, int height) = 0;
-	virtual void SetCullFace(RenderUtil::CullFace cullFace) = 0; 
-	virtual void SetFrontFace(RenderUtil::FrontFace frontFace) = 0; 
+	virtual void SetCullFace(FaceType faceType) = 0; 
+	virtual void SetFrontFace(WindingOrder windingOrder) = 0; 
 
 	virtual void EnableDepthTesting(bool enabled) = 0;
 	virtual void EnableFaceCulling(bool enabled) = 0;
 	virtual void EnableWireframeMode(bool enabled) = 0; 
 
-	virtual unique_ptr<IAttribLayout> CreateAttribLayout() const = 0;
-	virtual unique_ptr<Mesh> CreateMesh() const = 0; 
-	virtual unique_ptr<IShader> CreateShader(std::string_view vertSource, 
+	virtual Ref<IAttribLayout> CreateAttribLayout() const = 0;
+	virtual Ref<Mesh> CreateMesh() const = 0;
+	virtual Ref<IShader> CreateShader(std::string_view vertSource,
 		std::string_view fragSource) const = 0;
-	virtual unique_ptr<ITexture> CreateTexture(const ImageLoader::ImageProfile& profile) const = 0;
+	virtual Ref<ITexture> CreateTexture2D(const ImageInfo& imageInfo) const = 0;
 
 	void SetClearColor(glm::vec4 newClearColor) {
 		m_ClearColor = newClearColor; 
